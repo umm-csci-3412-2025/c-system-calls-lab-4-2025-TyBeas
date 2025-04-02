@@ -17,7 +17,7 @@ static int callback(const char *fpath, const struct stat *sb, int typeflag) {
 
 int main(int argc, char** argv) {
 
-    int main(int argc, char** argv){
+    int main(int argc, char** argv) {
         ftw(argv[1], callback, MAX_FTW_DEPTH);
 
         printf("There were %d directories.\n", dir_count);
