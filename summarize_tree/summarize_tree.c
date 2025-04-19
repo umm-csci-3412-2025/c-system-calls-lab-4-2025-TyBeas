@@ -29,7 +29,7 @@ void process_path(const char*);
 void process_directory(const char* path) {
   DIR* dirStream;
 
-  struct dirent* entry;
+  struct dirent* content;
 
   char* dname;
 
@@ -37,14 +37,14 @@ void process_directory(const char* path) {
 
   if(dirStream!=NULL){
   chdir(path);
-  while ((entry = readdir(dirStream))) {
-    dname = entry->d_name;
-    if (strcmp(dname, ".") == 0 || strcmp(dname, "..") == 0) {
+  while ((content = readdir(dirStream))) {
+    dname = content->d_name;
+    if (strcmp(dname, ".") != 0 || strcmp(dname, "..") != 0) {
       process_path(dname);
       }
     }
     num_dirs++;
-  closedir("..");
+    chdir("..");
   }
 
   closedir(dirStream);
