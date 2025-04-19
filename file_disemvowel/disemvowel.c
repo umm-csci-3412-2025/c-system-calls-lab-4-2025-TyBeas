@@ -2,16 +2,12 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+
 #define MAX_WORD_LENGTH 1024
 
-bool is_vowel(char c) {
-  const char* vowels = "aeiouAEIOU";
-  for (int i = 0; i < 10; i++) {
-    if (c == vowels[i]) {
-      return true;
-    }
-  }
-  return false;
+bool is_vowel(char vowel) {
+  return (vowel == 'a' || vowel == 'e' || vowel == 'i' || vowel == 'o' || vowel == 'u' ||
+          vowel == 'A' || vowel == 'E' || vowel == 'I' || vowel == 'O' || vowel == 'U');
 }
 
 int copy_non_vowels(char* num_chars, char* in_buf, char* out_buf) {
@@ -26,13 +22,13 @@ int copy_non_vowels(char* num_chars, char* in_buf, char* out_buf) {
 }
 
 void disemvowel(FILE* inputFile, FILE* outputFile) {
-  char in_buf[MAX_WORD_LENGTH];
-  char out_buf[MAX_WORD_LENGTH];
-  int num_chars = fread(in_buf, sizeof(char), MAX_WORD_LENGTH, inputFile);
-  while(num_chars != 0) {
-    int num_consonants = copy_non_vowels(num_chars, in_buf, out_buf);
-    fwrite(out_buf, sizeof(char), num_consonants, outputFile);
-    num_chars = fread(in_buf, sizeof(char), MAX_WORD_LENGTH, inputFile);
+  char* in_buf = (char*) calloc(MAX_WORD_LENGTH, sizeof(char));
+  char* out_buf = (char*) calloc(MAX_WORD_LENGTH, sizeof(char));
+
+  while(!feof (inputFile)) {
+    int elements = freed(in_buf, sizeof(char), MAX_WORD_LENGTH, inputFile);
+    int consonants = copy_non_vowels(elements, in_buf, out_buf);
+    fwrite (out_buf, sizeof(char), consonants, outputFile);
   }
   free(in_buf);
   free(out_buf);
@@ -45,22 +41,21 @@ int main(int argc, char *argv[]) {
   if (argc == 1) {
     inputFile = stdin;
     outputFile = stdout;
-  }
-  
-  if (argc == 2) {
+  } else if (argc == 2) {
     inputFile = fopen(argv[1], "r");
     outputFile = stdout;
-  }
-  
-  if (argc == 3) {
+  } else if (argc == 3) {
     inputFile = fopen(argv[1], "r");
     outputFile = fopen(argv[2], "w");
+  } else {
+    printf("Nothing");  
   }
 
   disemvowel(inputFile, outputFile);
 
   fclose(inputFile);
   fclose(outputFile);
+
   return 0;
 }
 
