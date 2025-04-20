@@ -39,7 +39,7 @@ void process_directory(const char* path) {
   chdir(path);
   while ((content = readdir(dirStream))) {
     dname = content->d_name;
-    if (strcmp(dname, ".") != 0 || strcmp(dname, "..") != 0) {
+    if (strcmp(dname, ".") != 0 && strcmp(dname, "..") != 0) {
       process_path(dname);
       }
     }
